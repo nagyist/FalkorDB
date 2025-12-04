@@ -23,7 +23,7 @@ ENV FALKORDB_TLS_PATH=${FALKORDB_HOME}/tls
 ENV FALKORDB_BROWSER_PATH=${FALKORDB_HOME}/browser
 
 # Install runtime dependencies using Alpine packages (equivalent to Debian version)
-RUN apk add --no-cache libgomp openssl nodejs npm supervisor && \
+RUN apk add --no-cache libgomp openssl nodejs npm supervisor bash && \
     mkdir -p /etc/supervisor/conf.d /var/log/supervisor
 
 WORKDIR ${FALKORDB_HOME}
@@ -39,10 +39,10 @@ COPY --from=compiler /FalkorDB/bin/linux*/src/falkordb.so ${FALKORDB_BIN_PATH}/f
 # Copy browser files from the Alpine-based browser image
 COPY --from=browser /app ${FALKORDB_BROWSER_PATH}
 
-RUN adduser -D -s /bin/sh -u 1001 falkordb && \
+RUN adduser -D -s /bin/bash -u 1001 falkordb && \
     chown -R falkordb:falkordb ${FALKORDB_HOME} && \
     chmod -R 755 ${FALKORDB_HOME} && \
-    adduser -D -s /bin/sh -u 1002 nextjs && \
+    adduser -D -s /bin/bash -u 1002 nextjs && \
     chown -R nextjs:nextjs ${FALKORDB_BROWSER_PATH} && \
     chmod -R 755 ${FALKORDB_BROWSER_PATH}
 
